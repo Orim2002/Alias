@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@alias/shared": "workspace:*",
-    "@fastify/static": "^9.1.0",
+    "@fastify/static": "^7.0.4",
     "fastify": "^4.27.0",
     "socket.io": "^4.7.5",
     "uuid": "^10.0.0"
