@@ -74,27 +74,21 @@ export function endTurn(turn: TurnState): TurnState {
 
 // ─── Score + rotation ─────────────────────────────────────────────────────────
 
+/**
+ * Scores for guessed and stolen words are applied live during the turn.
+ * This function only applies the skip penalty at turn end (if enabled).
+ */
 export function applyTurnScore(room: GameRoom, turn: TurnState): GameRoom {
-  const guessed = turn.words.filter(w => w.status === 'guessed').length;
+  if (!room.settings.skipPenalty) return room;
+
   const skipped = turn.words.filter(w => w.status === 'skipped').length;
-  const activeTeamChange = guessed - (room.settings.skipPenalty ? skipped : 0);
+  if (skipped === 0) return room;
 
-  // Tally stolen words per team
-  const stolenByTeam = new Map<string, number>();
-  for (const w of turn.words) {
-    if (w.status === 'stolen' && w.stolenByTeamId) {
-      stolenByTeam.set(w.stolenByTeamId, (stolenByTeam.get(w.stolenByTeamId) ?? 0) + 1);
-    }
-  }
-
-  const teams = room.teams.map(t => {
-    if (t.teamId === turn.teamId) {
-      return { ...t, score: Math.max(0, t.score + activeTeamChange) };
-    }
-    const stolen = stolenByTeam.get(t.teamId) ?? 0;
-    return stolen > 0 ? { ...t, score: t.score + stolen } : t;
-  });
-
+  const teams = room.teams.map(t =>
+    t.teamId === turn.teamId
+      ? { ...t, score: Math.max(0, t.score - skipped) }
+      : t,
+  );
   return { ...room, teams };
 }
 
