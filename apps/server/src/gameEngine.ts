@@ -76,18 +76,10 @@ export function endTurn(turn: TurnState): TurnState {
 
 /**
  * All scoring is applied live during the turn (guessed +1, manual-skip -1, stolen +1).
- * Only auto-skipped words (timer fired while still pending) need their penalty applied here.
+ * Words that were never reached when the timer fired are NOT penalized.
  */
-export function applyTurnScore(room: GameRoom, turn: TurnState): GameRoom {
-  const autoSkipped = turn.words.filter(w => w.autoSkipped).length;
-  if (autoSkipped === 0) return room;
-
-  const teams = room.teams.map(t =>
-    t.teamId === turn.teamId
-      ? { ...t, score: Math.max(0, t.score - autoSkipped) }
-      : t,
-  );
-  return { ...room, teams };
+export function applyTurnScore(room: GameRoom, _turn: TurnState): GameRoom {
+  return room;
 }
 
 export function advanceTurn(room: GameRoom): GameRoom {
