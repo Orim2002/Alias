@@ -39,6 +39,8 @@ export interface TurnWord {
   word: string;
   status: WordStatus;
   stolenByTeamId?: string;
+  /** True when the word was auto-skipped by the timer (not manually skipped by the describer) */
+  autoSkipped?: boolean;
 }
 
 export interface TurnState {

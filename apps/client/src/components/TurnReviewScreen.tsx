@@ -18,7 +18,7 @@ export function TurnReviewScreen({ room, playerId }: Props) {
   const guessed = turn.words.filter(w => w.status === 'guessed');
   const skipped = turn.words.filter(w => w.status === 'skipped');
   const stolen = turn.words.filter(w => w.status === 'stolen');
-  const scoreGain = guessed.length - (room.settings.skipPenalty ? skipped.length : 0);
+  const scoreGain = guessed.length - skipped.length;
 
   const teamColors = ['#6366f1', '#f43f5e', '#10b981', '#f59e0b', '#a855f7', '#06b6d4'];
   const teamIdx = room.teams.findIndex(t => t.teamId === turn.teamId);
@@ -103,7 +103,7 @@ export function TurnReviewScreen({ room, playerId }: Props) {
                 >
                   {w.status === 'guessed' ? '+1'
                     : w.status === 'stolen' ? '🗡️+1'
-                    : room.settings.skipPenalty ? '−1' : 'דילוג'}
+                    : '−1'}
                 </span>
               </div>
             );

@@ -59,7 +59,7 @@ export function resolveWord(
     i === idx ? { ...w, status: outcome } : w,
   );
 
-  const scoreChange = outcome === 'guessed' ? 1 : 0;
+  const scoreChange = outcome === 'guessed' ? 1 : -1;
 
   return { updated: { ...turn, words }, scoreChange };
 }
@@ -67,7 +67,7 @@ export function resolveWord(
 /** Called when the turn timer fires or all words are exhausted */
 export function endTurn(turn: TurnState): TurnState {
   const words: TurnWord[] = turn.words.map(w =>
-    w.status === 'pending' ? { ...w, status: 'skipped' } : w,
+    w.status === 'pending' ? { ...w, status: 'skipped', autoSkipped: true } : w,
   );
   return { ...turn, status: 'review', words };
 }
@@ -75,18 +75,16 @@ export function endTurn(turn: TurnState): TurnState {
 // ─── Score + rotation ─────────────────────────────────────────────────────────
 
 /**
- * Scores for guessed and stolen words are applied live during the turn.
- * This function only applies the skip penalty at turn end (if enabled).
+ * All scoring is applied live during the turn (guessed +1, manual-skip -1, stolen +1).
+ * Only auto-skipped words (timer fired while still pending) need their penalty applied here.
  */
 export function applyTurnScore(room: GameRoom, turn: TurnState): GameRoom {
-  if (!room.settings.skipPenalty) return room;
-
-  const skipped = turn.words.filter(w => w.status === 'skipped').length;
-  if (skipped === 0) return room;
+  const autoSkipped = turn.words.filter(w => w.autoSkipped).length;
+  if (autoSkipped === 0) return room;
 
   const teams = room.teams.map(t =>
     t.teamId === turn.teamId
-      ? { ...t, score: Math.max(0, t.score - skipped) }
+      ? { ...t, score: Math.max(0, t.score - autoSkipped) }
       : t,
   );
   return { ...room, teams };

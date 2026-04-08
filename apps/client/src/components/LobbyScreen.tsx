@@ -232,18 +232,13 @@ export function LobbyScreen({ room, playerId }: Props) {
             </div>
           </div>
 
-          {/* Skip penalty */}
-          <div className="flex items-center justify-between">
+          {/* Skip penalty — always on per real rules */}
+          <div className="flex items-center justify-between opacity-50">
             <div>
               <label className="text-sm text-zinc-300">קנס דילוג</label>
-              <p className="text-xs text-zinc-500">נקודה מינוס על כל מילה שדולגה</p>
+              <p className="text-xs text-zinc-500">מינוס נקודה על כל דילוג (חוק קבוע)</p>
             </div>
-            <button
-              onClick={() => updateSetting({ skipPenalty: !room.settings.skipPenalty })}
-              className={`relative w-12 h-6 rounded-full transition-colors ${room.settings.skipPenalty ? 'bg-indigo-600' : 'bg-zinc-700'}`}
-            >
-              <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${room.settings.skipPenalty ? 'translate-x-6' : ''}`} />
-            </button>
+            <span className="text-xs text-zinc-400 bg-zinc-800 px-2 py-1 rounded-lg">תמיד פעיל</span>
           </div>
         </section>
       )}
