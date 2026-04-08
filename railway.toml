@@ -2,11 +2,7 @@
 buildCommand = "pnpm install --frozen-lockfile && pnpm build"
 
 [deploy]
-startCommand = "NODE_ENV=production pnpm start"
+startCommand = "NODE_ENV=production node apps/server/dist/index.js"
 healthcheckPath = "/health"
 healthcheckTimeout = 60
 restartPolicyType = "on_failure"
-
-[[deploy.environmentVariables]]
-name = "PORT"
-value = "3001"

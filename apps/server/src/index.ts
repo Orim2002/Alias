@@ -10,13 +10,16 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const PORT = Number(process.env.PORT ?? 3001);
 const IS_PROD = process.env.NODE_ENV === 'production';
+console.log(`[server] PORT=${PORT} NODE_ENV=${process.env.NODE_ENV}`);
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN ?? 'http://localhost:5173';
 
 const app = Fastify({ logger: false });
 
 // In production, serve the built client from the same process
 if (IS_PROD) {
+  // __dirname = /app/apps/server/dist  →  ../../client/dist = /app/apps/client/dist
   const clientDist = path.resolve(__dirname, '../../client/dist');
+  console.log(`[server] serving static files from: ${clientDist}`);
   await app.register(fastifyStatic, { root: clientDist });
   // SPA fallback — serve index.html for all non-API routes
   app.setNotFoundHandler((_req, reply) => {
