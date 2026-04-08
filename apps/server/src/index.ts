@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import Fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
@@ -10,16 +11,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const PORT = Number(process.env.PORT ?? 3001);
 const IS_PROD = process.env.NODE_ENV === 'production';
-console.log(`[server] PORT=${PORT} NODE_ENV=${process.env.NODE_ENV}`);
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN ?? 'http://localhost:5173';
 
-const app = Fastify({ logger: false });
+console.log(`[server] starting — PORT=${PORT} NODE_ENV=${process.env.NODE_ENV} IS_PROD=${IS_PROD}`);
+
+const app = Fastify({ logger: true });
 
 // In production, serve the built client from the same process
 if (IS_PROD) {
-  // __dirname = /app/apps/server/dist  →  ../../client/dist = /app/apps/client/dist
   const clientDist = path.resolve(__dirname, '../../client/dist');
-  console.log(`[server] serving static files from: ${clientDist}`);
+  console.log(`[server] client dist path: ${clientDist}`);
+  console.log(`[server] client dist exists: ${fs.existsSync(clientDist)}`);
+
   await app.register(fastifyStatic, { root: clientDist });
   // SPA fallback — serve index.html for all non-API routes
   app.setNotFoundHandler((_req, reply) => {
@@ -45,6 +48,6 @@ io.on('connection', (socket) => {
 });
 
 app.listen({ port: PORT, host: '0.0.0.0' }, (err) => {
-  if (err) { console.error(err); process.exit(1); }
+  if (err) { console.error('[server] failed to start:', err); process.exit(1); }
   console.log(`[server] listening on http://0.0.0.0:${PORT}`);
 });
