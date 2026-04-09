@@ -70,11 +70,13 @@ export interface GameRoom {
 // ─── Derived / View Types ─────────────────────────────────────────────────────
 
 export type RoomView = Omit<GameRoom, 'currentTurn'> & {
-  currentTurn: Omit<TurnState, 'words'> & {
+  currentTurn: Omit<TurnState, 'words' | 'status'> & {
+    status: 'countdown' | 'active' | 'steal_vote' | 'review' | 'ended';
     words: TurnWord[] | null;
     wordCount: number;
     guessedCount: number;
     stolenCount: number;
+    isStealTurn: boolean;
     /** The word being contested during the steal-vote window (visible to all) */
     stealVoteWord?: string;
   } | null;

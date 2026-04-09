@@ -421,6 +421,8 @@ function handleWordOutcome(io: IO, socket: TypedSocket, outcome: 'guessed' | 'sk
   if (!room || !room.currentTurn) return;
   if (room.currentTurn.status !== 'active') return;
   if (room.currentTurn.describerId !== ctx.playerId) return;
+  // Reject actions after the turn should have ended (clock drift / lag)
+  if (Date.now() >= room.currentTurn.endsAt) return;
 
   const { updated: updatedTurn, scoreChange } = resolveWord(room.currentTurn, outcome);
   const wordEntry = room.currentTurn.words[currentWordIndex(room.currentTurn)];

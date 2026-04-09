@@ -4,7 +4,7 @@ import { getStealPositions } from '@alias/shared';
 import { shuffleDeck, WORD_LIST } from './words.js';
 
 const COUNTDOWN_MS = 3000;
-const WORDS_PER_TURN = 20; // max words drawn per turn
+const WORDS_PER_TURN = 10; // words drawn per turn
 
 // ─── Turn lifecycle ───────────────────────────────────────────────────────────
 

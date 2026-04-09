@@ -135,14 +135,16 @@ export function TurnActiveScreen({ room, playerId, currentWord, lastWordResult }
             <div className="grid grid-cols-2 gap-3">
               <button
                 onPointerDown={() => socket.emit('turn:skipped')}
-                className="py-5 rounded-2xl font-bold text-lg active:scale-95 transition-transform"
+                disabled={secondsLeft === 0}
+                className="py-5 rounded-2xl font-bold text-lg active:scale-95 transition-transform disabled:opacity-30"
                 style={{ background: '#1e293b', color: '#94a3b8' }}
               >
                 דלג
               </button>
               <button
                 onPointerDown={() => socket.emit('turn:guessed')}
-                className="py-5 rounded-2xl font-bold text-lg active:scale-95 transition-transform"
+                disabled={secondsLeft === 0}
+                className="py-5 rounded-2xl font-bold text-lg active:scale-95 transition-transform disabled:opacity-30"
                 style={{ background: '#166534', color: '#4ade80', border: '1px solid #16a34a' }}
               >
                 נוחש!
