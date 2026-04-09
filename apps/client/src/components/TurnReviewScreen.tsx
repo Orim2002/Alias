@@ -112,14 +112,22 @@ export function TurnReviewScreen({ room, playerId }: Props) {
       </section>
 
       {/* Continue */}
-      <div>
+      <div className="space-y-2">
         {isHost ? (
-          <button
-            onClick={() => socket.emit('turn:confirm_review')}
-            className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 rounded-2xl font-bold text-xl transition-colors"
-          >
-            תור הבא
-          </button>
+          <>
+            <button
+              onClick={() => socket.emit('turn:confirm_review')}
+              className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 rounded-2xl font-bold text-xl transition-colors"
+            >
+              תור הבא
+            </button>
+            <button
+              onClick={() => socket.emit('room:close')}
+              className="w-full py-3 bg-transparent hover:bg-red-950 border border-red-900 rounded-2xl font-bold text-sm text-red-500 transition-colors"
+            >
+              סיים משחק
+            </button>
+          </>
         ) : (
           <p className="text-zinc-500 text-sm text-center">ממתין למארח להמשיך…</p>
         )}

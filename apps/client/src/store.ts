@@ -78,12 +78,17 @@ export function useGameState() {
       setState(s => ({ ...s, lastWordResult: payload }));
       setTimeout(() => setState(s => ({ ...s, lastWordResult: null })), 1500);
     }
+    function onRoomClosed() {
+      clearSession();
+      setState(initialState);
+    }
 
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.on('room:state', onRoomState);
     socket.on('turn:your_word', onYourWord);
     socket.on('turn:word_result', onWordResult);
+    socket.on('room:closed', onRoomClosed);
 
     // Auto-connect on mount if we have a saved session
     if (loadSession() && !socket.connected) {
@@ -96,6 +101,7 @@ export function useGameState() {
       socket.off('room:state', onRoomState);
       socket.off('turn:your_word', onYourWord);
       socket.off('turn:word_result', onWordResult);
+      socket.off('room:closed', onRoomClosed);
     };
   }, []);
 

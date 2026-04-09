@@ -371,6 +371,19 @@ export function registerHandlers(io: IO, socket: TypedSocket) {
     }
   });
 
+  // ── room:close ──────────────────────────────────────────────────────────────
+  socket.on('room:close', () => {
+    const ctx = store.lookupSocket(socket.id);
+    if (!ctx) return;
+    const room = store.getRoom(ctx.roomId);
+    if (!room || room.hostId !== ctx.playerId) return;
+
+    clearTurnTimer(ctx.roomId);
+    io.to(ctx.roomId).emit('room:closed');
+    store.deleteRoom(ctx.roomId);
+    deckStore.delete(ctx.roomId);
+  });
+
   // ── turn:confirm_review ─────────────────────────────────────────────────────
   socket.on('turn:confirm_review', () => {
     const ctx = store.lookupSocket(socket.id);

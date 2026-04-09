@@ -260,6 +260,12 @@ export function LobbyScreen({ room, playerId }: Props) {
                 צריך לפחות 2 קבוצות עם שחקנים כדי להתחיל
               </p>
             )}
+            <button
+              onClick={() => socket.emit('room:close')}
+              className="w-full py-3 bg-transparent hover:bg-red-950 border border-red-900 rounded-2xl font-bold text-sm text-red-500 transition-colors"
+            >
+              סגור חדר
+            </button>
           </>
         ) : (
           <p className="text-zinc-500 text-sm text-center">ממתין למארח להתחיל…</p>

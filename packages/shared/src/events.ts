@@ -12,6 +12,7 @@ export interface ClientToServerEvents {
   'room:rename_team': (payload: { teamIndex: number; name: string }) => void;
   'room:update_settings': (payload: Partial<GameSettings>) => void;
   'room:start': (ack: (res: AckResponse<null>) => void) => void;
+  'room:close': () => void;
 
   'turn:guessed': () => void;
   'turn:skipped': () => void;
@@ -24,6 +25,7 @@ export interface ClientToServerEvents {
 
 export interface ServerToClientEvents {
   'room:state': (room: RoomView) => void;
+  'room:closed': () => void;
   'turn:your_word': (payload: { word: string; index: number; total: number }) => void;
   'turn:word_result': (payload: {
     word: string;
