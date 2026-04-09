@@ -48,11 +48,11 @@ export function HomeScreen({ onJoined }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-zinc-950 text-white flex flex-col items-center justify-center p-5">
       <div className="w-full max-w-sm space-y-8">
         {/* Logo */}
         <div className="text-center space-y-2">
-          <h1 className="text-7xl font-black tracking-tight text-white">alias</h1>
+          <h1 className="text-6xl sm:text-7xl font-black tracking-tight text-white">alias</h1>
           <p className="text-zinc-400 text-sm">משחק המסיבה לניחוש מילים</p>
         </div>
 

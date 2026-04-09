@@ -3,12 +3,12 @@ import { getStealPositions } from '@alias/shared';
 
 // ─── Team colors ──────────────────────────────────────────────────────────────
 export const TEAM_COLORS: Record<number, { token: string; glow: string; text: string; bg: string; border: string }> = {
-  0: { token: '#818cf8', glow: '#6366f188', text: '#a5b4fc', bg: '#1e1b4b', border: '#6366f1' },
-  1: { token: '#fb7185', glow: '#f43f5e88', text: '#fda4af', bg: '#4c0519', border: '#f43f5e' },
-  2: { token: '#34d399', glow: '#10b98188', text: '#6ee7b7', bg: '#064e3b', border: '#10b981' },
-  3: { token: '#fbbf24', glow: '#f59e0b88', text: '#fcd34d', bg: '#451a03', border: '#f59e0b' },
-  4: { token: '#c084fc', glow: '#a855f788', text: '#d8b4fe', bg: '#3b0764', border: '#a855f7' },
-  5: { token: '#22d3ee', glow: '#06b6d488', text: '#67e8f9', bg: '#083344', border: '#06b6d4' },
+  0: { token: '#f87171', glow: '#ef444488', text: '#fca5a5', bg: '#4c0519', border: '#ef4444' }, // אדומה
+  1: { token: '#60a5fa', glow: '#3b82f688', text: '#93c5fd', bg: '#1e3a5f', border: '#3b82f6' }, // כחולה
+  2: { token: '#4ade80', glow: '#22c55e88', text: '#86efac', bg: '#052e16', border: '#22c55e' }, // ירוקה
+  3: { token: '#fbbf24', glow: '#f59e0b88', text: '#fde68a', bg: '#451a03', border: '#f59e0b' }, // צהובה
+  4: { token: '#c084fc', glow: '#a855f788', text: '#d8b4fe', bg: '#3b0764', border: '#a855f7' }, // סגולה
+  5: { token: '#22d3ee', glow: '#06b6d488', text: '#67e8f9', bg: '#083344', border: '#06b6d4' }, // תכולה
 };
 
 // ─── SVG board constants ──────────────────────────────────────────────────────

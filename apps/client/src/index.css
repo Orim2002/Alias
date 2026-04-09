@@ -5,15 +5,34 @@
 @layer base {
   * {
     -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+
+  html {
+    /* Prevent iOS bounce / overscroll */
+    height: 100%;
+    overflow: hidden;
   }
 
   body {
     @apply bg-zinc-950 text-white;
     overscroll-behavior: none;
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  /* Prevent double-tap zoom on buttons (important for mobile game UX) */
+  #root {
+    height: 100%;
+  }
+
+  /* Prevent double-tap zoom on buttons */
   button {
     touch-action: manipulation;
+  }
+
+  /* Prevent iOS input zoom (font-size must be ≥16px) */
+  input, select, textarea {
+    font-size: 16px !important;
   }
 }

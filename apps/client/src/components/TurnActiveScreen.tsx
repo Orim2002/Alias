@@ -103,7 +103,7 @@ export function TurnActiveScreen({ room, playerId, currentWord, lastWordResult }
       </div>
 
       {/* Main area */}
-      <div className="flex-1 flex flex-col items-center justify-center p-5 gap-5">
+      <div className="flex-1 flex flex-col items-center justify-center p-4 gap-4">
 
         {/* ── DESCRIBER VIEW ── */}
         {isDescriber && currentWord && (

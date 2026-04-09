@@ -40,7 +40,7 @@ export function LobbyScreen({ room, playerId }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white p-4 max-w-2xl mx-auto space-y-6 pb-10">
+    <div className="min-h-screen bg-zinc-950 text-white p-3 sm:p-4 max-w-2xl mx-auto space-y-5 pb-16">
       {showRules && <HowToPlayModal onClose={() => setShowRules(false)} />}
 
       {/* Header */}
