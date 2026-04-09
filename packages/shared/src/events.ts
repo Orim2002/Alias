@@ -5,6 +5,7 @@ import type { RoomView, GameSettings } from './types.js';
 export interface ClientToServerEvents {
   'room:create': (payload: { playerName: string }, ack: (res: AckResponse<{ roomCode: string; playerId: string }>) => void) => void;
   'room:join': (payload: { roomCode: string; playerName: string }, ack: (res: AckResponse<{ playerId: string }>) => void) => void;
+  'room:rejoin': (payload: { playerId: string; roomCode: string }, ack: (res: AckResponse<null>) => void) => void;
   'room:assign_team': (payload: { targetPlayerId: string; teamIndex: number }) => void;
   'room:add_team': () => void;
   'room:remove_team': () => void;

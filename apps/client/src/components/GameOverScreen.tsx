@@ -1,5 +1,6 @@
 import type { RoomView } from '@alias/shared';
 import { GameBoard, TEAM_COLORS } from './GameBoard.js';
+import { clearSession } from '../store.js';
 
 interface Props {
   room: RoomView;
@@ -74,7 +75,7 @@ export function GameOverScreen({ room, playerId }: Props) {
       </section>
 
       <button
-        onClick={() => window.location.reload()}
+        onClick={() => { clearSession(); window.location.reload(); }}
         className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 rounded-2xl font-bold text-xl transition-colors"
       >
         שחקו שוב

@@ -7,20 +7,20 @@ const KEY_PLAYER_ID = 'alias:playerId';
 const KEY_ROOM_CODE = 'alias:roomCode';
 
 export function saveSession(playerId: string, roomCode: string) {
-  sessionStorage.setItem(KEY_PLAYER_ID, playerId);
-  sessionStorage.setItem(KEY_ROOM_CODE, roomCode);
+  localStorage.setItem(KEY_PLAYER_ID, playerId);
+  localStorage.setItem(KEY_ROOM_CODE, roomCode);
 }
 
 export function loadSession(): { playerId: string; roomCode: string } | null {
-  const playerId = sessionStorage.getItem(KEY_PLAYER_ID);
-  const roomCode = sessionStorage.getItem(KEY_ROOM_CODE);
+  const playerId = localStorage.getItem(KEY_PLAYER_ID);
+  const roomCode = localStorage.getItem(KEY_ROOM_CODE);
   if (playerId && roomCode) return { playerId, roomCode };
   return null;
 }
 
 export function clearSession() {
-  sessionStorage.removeItem(KEY_PLAYER_ID);
-  sessionStorage.removeItem(KEY_ROOM_CODE);
+  localStorage.removeItem(KEY_PLAYER_ID);
+  localStorage.removeItem(KEY_ROOM_CODE);
 }
 
 // ─── Global game state hook ──────────────────────────────────────────────────
@@ -28,9 +28,7 @@ export function clearSession() {
 export interface GameState {
   room: RoomView | null;
   playerId: string | null;
-  /** Word sent exclusively to this player when they are describer */
   currentWord: { word: string; index: number; total: number } | null;
-  /** Last word result flash */
   lastWordResult: { word: string; status: 'guessed' | 'skipped' | 'stolen'; scoreChange: number; stolenByTeamName?: string } | null;
   connected: boolean;
 }
@@ -53,6 +51,19 @@ export function useGameState() {
   useEffect(() => {
     function onConnect() {
       setState(s => ({ ...s, connected: true }));
+
+      // On (re)connect, try to rejoin saved session
+      const session = loadSession();
+      if (session) {
+        socket.emit('room:rejoin', { playerId: session.playerId, roomCode: session.roomCode }, (res) => {
+          if (res.ok) {
+            setState(s => ({ ...s, playerId: session.playerId }));
+          } else {
+            // Session expired — clear it
+            clearSession();
+          }
+        });
+      }
     }
     function onDisconnect() {
       setState(s => ({ ...s, connected: false }));
@@ -65,7 +76,6 @@ export function useGameState() {
     }
     function onWordResult(payload: { word: string; status: 'guessed' | 'skipped' | 'stolen'; scoreChange: number; stolenByTeamName?: string }) {
       setState(s => ({ ...s, lastWordResult: payload }));
-      // Clear the flash after 1.5s
       setTimeout(() => setState(s => ({ ...s, lastWordResult: null })), 1500);
     }
 
@@ -74,6 +84,11 @@ export function useGameState() {
     socket.on('room:state', onRoomState);
     socket.on('turn:your_word', onYourWord);
     socket.on('turn:word_result', onWordResult);
+
+    // Auto-connect on mount if we have a saved session
+    if (loadSession() && !socket.connected) {
+      socket.connect();
+    }
 
     return () => {
       socket.off('connect', onConnect);

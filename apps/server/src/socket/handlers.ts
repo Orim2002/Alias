@@ -168,6 +168,30 @@ export function registerHandlers(io: IO, socket: TypedSocket) {
     ack({ ok: true, data: { playerId } });
   });
 
+  // ── room:rejoin ─────────────────────────────────────────────────────────────
+  socket.on('room:rejoin', ({ playerId, roomCode }, ack) => {
+    const room = store.getRoomByCode(roomCode);
+    if (!room) return ack({ ok: false, error: 'Room not found.' });
+
+    const player = room.players[playerId];
+    if (!player) return ack({ ok: false, error: 'Player not found.' });
+
+    // Re-index this socket to the player
+    store.indexSocket(socket.id, room.roomId, playerId);
+    socket.join(room.roomId);
+    socket.join(`describer:${playerId}`);
+
+    // Mark player as reconnected
+    const updated = {
+      ...room,
+      players: { ...room.players, [playerId]: { ...player, isConnected: true } },
+    };
+    store.setRoom(updated);
+    broadcastRoom(io, updated);
+
+    ack({ ok: true, data: null });
+  });
+
   // ── room:assign_team ────────────────────────────────────────────────────────
   socket.on('room:assign_team', ({ targetPlayerId, teamIndex }) => {
     const ctx = store.lookupSocket(socket.id);
