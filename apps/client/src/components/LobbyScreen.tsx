@@ -170,16 +170,20 @@ export function LobbyScreen({ room, playerId }: Props) {
               <div key={p.playerId} className="flex items-center gap-2 bg-zinc-800 rounded-xl px-3 py-2">
                 <span className="text-sm">{p.name}{p.playerId === playerId ? ' (אתה)' : ''}</span>
                 {isHost && (
-                  <div className="flex gap-1">
-                    {room.teams.map((t, idx) => (
-                      <button
-                        key={t.teamId}
-                        onClick={() => assignToTeam(p.playerId, idx)}
-                        className="text-[10px] px-2 py-1 rounded-lg bg-zinc-700 hover:bg-indigo-600 transition-colors"
-                      >
-                        → {t.name.split(' ')[0]}
-                      </button>
-                    ))}
+                  <div className="flex gap-1 flex-wrap">
+                    {room.teams.map((t, idx) => {
+                      const c = TEAM_COLORS[idx % 6]!;
+                      return (
+                        <button
+                          key={t.teamId}
+                          onClick={() => assignToTeam(p.playerId, idx)}
+                          className="text-[11px] px-2 py-1 rounded-lg bg-zinc-700 hover:bg-zinc-600 transition-colors flex items-center gap-1"
+                        >
+                          <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: c.token }} />
+                          {t.name}
+                        </button>
+                      );
+                    })}
                   </div>
                 )}
               </div>
